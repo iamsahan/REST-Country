@@ -1,14 +1,4 @@
 import { useState } from "react";
-import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
-import {
-  MainContainer,
-  ChatContainer,
-  MessageList,
-  Message,
-  MessageInput,
-  TypingIndicator,
-  Avatar,
-} from "@chatscope/chat-ui-kit-react";
 import Lottie from "lottie-react";
 import { motion } from "framer-motion";
 import { Mic, Minimize2, Send } from "lucide-react";
@@ -27,7 +17,6 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([
     {
       message: "Hello, I'm ChatGPT! Ask me anything!",
-      sentTime: "just now",
       sender: "ChatGPT",
     },
   ]);
@@ -38,15 +27,16 @@ const ChatBot = () => {
   const voiceSupported = "webkitSpeechRecognition" in window;
 
   const handleSend = async (message) => {
+    if (!message.trim()) return;
     const newMessage = {
       message,
-      direction: "outgoing",
       sender: "user",
     };
 
     const newMessages = [...messages, newMessage];
     setMessages(newMessages);
     setIsTyping(true);
+    setInputText("");
 
     await processMessageToChatGPT(newMessages);
   };
@@ -116,6 +106,7 @@ const ChatBot = () => {
 
     recognition.start();
   };
+
   return (
     <div className="relative font-sans">
       {isChatOpen ? (
@@ -123,7 +114,7 @@ const ChatBot = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed bottom-6 right-6 z-50 rounded-2xl shadow-xl overflow-hidden border border-gray-200 backdrop-blur-md"
+          className="fixed bottom-6 right-6 z-50 rounded-2xl shadow-xl overflow-hidden border border-gray-200 backdrop-blur-md bg-white"
           style={{ height: "600px", width: "400px" }}
         >
           {/* Header */}
@@ -147,37 +138,30 @@ const ChatBot = () => {
             </motion.button>
           </header>
 
-          {/* Chat UI */}
-
-          {/* Chat UI */}
-          <div className="flex flex-col h-[540px]">
-            <MainContainer>
-              <ChatContainer>
-                <MessageList
-                  scrollBehavior="smooth"
-                  typingIndicator={
-                    isTyping ? (
-                      <TypingIndicator content="ChatGPT is typing..." />
-                    ) : null
-                  }
+          {/* Chat Body */}
+          <div className="flex flex-col justify-between h-[540px]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`max-w-[80%] px-4 py-2 rounded-lg text-sm ${
+                    msg.sender === "user"
+                      ? "bg-blue-500 text-white self-end ml-auto"
+                      : "bg-white text-gray-800 self-start mr-auto shadow"
+                  }`}
                 >
-                  {messages.map((msg, i) => (
-                    <Message
-                      key={i}
-                      model={msg}
-                      className={
-                        msg.sender === "ChatGPT"
-                          ? "bg-blue-50 text-black"
-                          : "bg-gray-100 text-gray-800"
-                      }
-                    />
-                  ))}
-                </MessageList>
-              </ChatContainer>
-            </MainContainer>
+                  {msg.message}
+                </div>
+              ))}
+              {isTyping && (
+                <div className="text-sm text-gray-500 italic">
+                  ChatGPT is typing...
+                </div>
+              )}
+            </div>
 
-            {/* Move input here */}
-            <div className="flex items-center px-3 py-4 bg-white border-t border-gray-200">
+            {/* Input Field */}
+            <div className="flex items-center px-3 py-4 border-t border-gray-200 bg-white">
               <button
                 onClick={handleVoiceInput}
                 className="text-blue-500 hover:text-blue-600 mr-2"
@@ -193,15 +177,11 @@ const ChatBot = () => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     handleSend(inputText);
-                    setInputText("");
                   }
                 }}
               />
               <button
-                onClick={() => {
-                  handleSend(inputText);
-                  setInputText("");
-                }}
+                onClick={() => handleSend(inputText)}
                 className="ml-2 text-blue-600 hover:text-blue-800"
               >
                 <Send size={20} />
