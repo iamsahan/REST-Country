@@ -10,8 +10,26 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chatscope/chat-ui-kit-react": "^2.0.3",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "@splinetool/react-spline": "^4.0.0",
+    "@splinetool/runtime": "^1.9.92",
+    "@tailwindcss/vite": "^4.1.6",
+    "axios": "^1.9.0",
+    "framer-motion": "^12.10.5",
+    "leaflet": "^1.9.4",
+    "lottie-react": "^2.4.1",
+    "lucide-react": "^0.509.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.6.0",
+    "recharts": "^2.15.3",
+    "swiper": "^11.2.6",
+    "tailwindcss": "^4.1.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
