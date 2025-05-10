@@ -16,7 +16,7 @@ const ChatBot = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
-      message: "Hello, I'm ChatGPT! Ask me anything!",
+      message: "Hello, I'm CRUSIOUS AI! Ask me anything!",
       sender: "ChatGPT",
     },
   ]);
@@ -155,7 +155,7 @@ const ChatBot = () => {
               ))}
               {isTyping && (
                 <div className="text-sm text-gray-500 italic">
-                  ChatGPT is typing...
+                  CRUSIOUs is thinking...
                 </div>
               )}
             </div>

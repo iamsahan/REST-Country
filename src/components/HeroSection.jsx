@@ -12,7 +12,7 @@ const HeroSection = () => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
           <div className="lg:w-1/2 mb-10 ml-16 lg:mb-0 animate__animated animate__fadeIn animate__delay-1s">
             <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
-              The World on Factbook
+              The World Top Factbook
             </h1>
             <div className="border-l-4 border-red-600 pl-4 mb-6">
               <p className="text-lg md:text-xl max-w-md">

@@ -1,42 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 
-const NavLinks = ({ className = "" }) => (
-  <>
-    {["Home", "Countries", "About", "Pricing"].map((text) => (
-      <a
-        key={text}
-        href="#"
-        title={text}
-        className={`text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 ${className}`}
-      >
-        {text}
-      </a>
-    ))}
-  </>
-);
+function NavLinks({ className = "" }) {
+  const links = [
+    { name: "Home", path: "/" },
+    { name: "Countries", path: "/countries" },
+    { name: "About", path: "/about" },
+    { name: "Blog", path: "/blog" },
+  ];
+
+  return (
+    <>
+      {links.map(({ name, path }) => (
+        <Link
+          key={name}
+          to={path}
+          title={name}
+          className={`text-base font-medium text-gray-800 hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md ${className}`}
+        >
+          {name}
+        </Link>
+      ))}
+    </>
+  );
+}
 
 const Header = () => {
+  const { user } = useSelector((state) => state.auth);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // Close the mobile menu on any window resize or route change
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <header className="fixed z-50 w-screen bg-white pb-6 lg:pb-0 shadow-2xl">
       <div className="px-3 mx-auto max-w-7xl sm:px-4 lg:px-6">
         {/* Top Navigation */}
         <nav className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <a href="#" title="Logo" className="flex">
+          <div className="flex items-center space-x-2">
+            <Link to="/" title="Home" className="flex items-center space-x-2">
               <img
                 className="w-auto h-8 lg:h-10"
-                src="https://cdn.rareblocks.xyz/collection/celebration/images/logo.svg"
-                alt="Logo"
+                src="/images/crusious_logo.png"
+                alt="CRUSIOUS Logo"
               />
-            </a>
+              <span className="text-xl font-semibold text-gray-800">
+                CRUSIOUS
+              </span>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             type="button"
             className="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <svg
               className="block w-6 h-6"
@@ -61,26 +88,50 @@ const Header = () => {
 
           {/* Call to Action + Theme Toggle */}
           <div className="hidden lg:inline-flex items-center space-x-4 ml-10">
-            <button className="bg-violet-500 py-2 px-5 rounded-3xl shadow-2xl"></button>
+            {user ? (
+              <Link to="/profile">
+                <div className="w-10 h-10 rounded-full bg-gray-300 text-center flex items-center justify-center text-white">
+                  {user.user.name.charAt(0)}{" "}
+                </div>
+              </Link>
+            ) : (
+              <button
+                variant="contained"
+                color="primary"
+                className="bg-violet-500 py-2 px-5 font-semibold rounded-3xl shadow-2xl"
+                href="/login"
+              >
+                Login
+              </button>
+            )}
           </div>
         </nav>
 
         {/* Mobile Navigation */}
-        <nav className="pt-4 pb-6 bg-white border border-gray-200 rounded-md shadow-md lg:hidden">
-          <div className="px-6 space-y-1">
-            <NavLinks className="inline-flex py-2" />
-          </div>
-          <div className="px-6 mt-6 flex flex-col space-y-3">
-            <a
-              href="#"
-              className="inline-flex justify-center px-4 py-3 text-base font-semibold text-white bg-blue-600 rounded-md transition-all duration-200 hover:bg-blue-700 focus:bg-blue-700"
-              role="button"
-            >
-              Get started now
-            </a>
-            <Button variant="outlined" color="primary"></Button>
-          </div>
-        </nav>
+        {isMobileMenuOpen && (
+          <nav className="pt-4 pb-6 bg-white border border-gray-200 rounded-md shadow-md lg:hidden">
+            <div className="px-6 space-y-1">
+              <NavLinks className="inline-flex py-2" />
+            </div>
+            {/* Mobile Login/Profile Button */}
+            <div className="mt-4 px-6">
+              {user ? (
+                <div className="w-10 h-10 rounded-full bg-gray-300 text-center flex items-center justify-center text-white">
+                  {user.name.charAt(0)} {/* Display first letter of the name */}
+                </div>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="bg-violet-500 py-2 px-5 rounded-3xl shadow-2xl w-full"
+                  href="/login"
+                >
+                  Login
+                </Button>
+              )}
+            </div>
+          </nav>
+        )}
       </div>
     </header>
   );

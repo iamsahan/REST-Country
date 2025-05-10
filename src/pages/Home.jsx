@@ -79,46 +79,56 @@ const Home = () => {
           </div>
         </header>
         {/* Hero Section */}
-        <section>
-          <div className="container mx-auto w-screen text-center overflow-hidden">
-            <div className="aspect-video w-screen shadow-md overflow-hidden">
-              <video
-                className="h-full object-cover w-full"
-                src="/videos/video-dem.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-            </div>
+        <section className="w-screen h-screen overflow-hidden">
+          <div className="relative w-full h-full">
+            <video
+              className="w-full h-full object-cover"
+              src="/videos/video-dem.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
           </div>
         </section>
 
         {/* Country Cards Section */}
-        <section className="py-16 px-4 bg-gray-100">
-          <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-10 animate__animated animate__fadeIn">
-              Featured Countries
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <section className="py-20 px-4 bg-gradient-to-br from-blue-50 via-white to-gray-100">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-5xl font-extrabold text-gray-800 animate__animated animate__fadeInUp">
+                Featured Countries
+              </h2>
+              <p className="mt-4 text-gray-600 text-lg max-w-2xl mx-auto animate__animated animate__fadeInUp animate__delay-1s">
+                Discover some of the most popular countries with fascinating
+                cultures, diverse geography, and rich histories.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 animate__animated animate__fadeInUp animate__delay-2s">
               {countries.slice(0, 8).map((country, idx) => (
-                <CountryCard
+                <div
                   key={idx}
-                  id={country.cca3}
-                  flag={country.flags.svg}
-                  name={country.name.common}
-                  population={country.population}
-                  region={country.region}
-                  capital={country.capital?.[0] || "N/A"}
-                />
+                  className="transform hover:scale-105 transition duration-300 ease-in-out shadow-lg rounded-2xl overflow-hidden bg-white hover:shadow-2xl"
+                >
+                  <CountryCard
+                    id={country.cca3}
+                    flag={country.flags.svg}
+                    name={country.name.common}
+                    population={country.population}
+                    region={country.region}
+                    capital={country.capital?.[0] || "N/A"}
+                  />
+                </div>
               ))}
             </div>
           </div>
         </section>
+
         {/* Chart Section */}
         <section className="py-16 px-4 bg-white">
           <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-10 animate__animated animate__fadeIn">
+            <h2 className="text-5xl font-bold text-center mb-10 animate__animated animate__fadeIn">
               Population Insights
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -170,11 +180,18 @@ const Home = () => {
           </div>
         </section>
         {/* Flag Gallery Slider */}
-        <section className="py-16 px-4 bg-blue-50">
-          <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-10 animate__animated animate__fadeIn">
-              Flags of the World
-            </h2>
+        <section className="py-20 px-4 bg-gradient-to-r from-blue-50 via-white to-blue-100">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-5xl font-extrabold text-gray-800 mb-6 animate__animated animate__fadeInUp">
+                Flags of the World
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-10 animate__animated animate__fadeInUp animate__delay-1s">
+                Explore the unique flags of different nations around the globe.
+                Hover to discover more!
+              </p>
+            </div>
+
             <Swiper
               modules={[Autoplay, Pagination, Navigation]}
               spaceBetween={20}
@@ -187,17 +204,17 @@ const Home = () => {
               autoplay={{ delay: 3000 }}
               pagination={{ clickable: true }}
               navigation
-              className="animate__animated animate__fadeIn"
+              className="animate__animated animate__fadeIn animate__delay-2s"
             >
               {countries.slice(0, 12).map((country, idx) => (
                 <SwiperSlide key={idx}>
-                  <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg">
+                  <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out hover:shadow-2xl">
                     <img
                       src={country.flags.svg}
                       alt={country.name.common}
-                      className="w-32 h-20 object-cover rounded shadow mb-4"
+                      className="w-32 h-20 object-cover rounded-md shadow-lg mb-4 transform hover:scale-110 transition duration-200"
                     />
-                    <p className="text-sm font-medium text-center">
+                    <p className="text-sm font-semibold text-gray-800 text-center">
                       {country.name.common}
                     </p>
                   </div>
@@ -206,18 +223,19 @@ const Home = () => {
             </Swiper>
           </div>
         </section>
+
         {/* Map Section */}
         <section className="py-16 px-4 bg-white">
           <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-10 text-gray-800 animate__animated animate__fadeIn">
-              Interactive Country Map
+            <h2 className="text-5xl font-bold text-center mb-10 text-gray-800 animate__animated animate__fadeIn">
+              Global Map
             </h2>
-            <div className="h-[500px] w-full rounded-lg overflow-hidden shadow-xl animate__animated animate__zoomIn">
+            <div className="h-[500px] w-full rounded-lg overflow-hidden shadow-xl animate__animated animate__zoomIn z-0">
               <MapContainer
                 center={[20, 0]}
-                zoom={2}
-                scrollWheelZoom={true}
-                style={{ height: "100%", width: "100%" }}
+                zoom={3}
+                scrollWheelZoom={false}
+                style={{ height: "100%", width: "100%", zIndex: 0 }}
               >
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -250,7 +268,7 @@ const Home = () => {
         </section>
         {/* Call to Action */}
 
-        <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-indigo-800 text-white">
+        <section className="py-16 px-4 bg-gradient-to-r bg-gray-900 text-white">
           <div className="container mx-auto text-center">
             <h2 className="text-3xl font-bold mb-4 animate__animated animate__fadeIn">
               Want to Learn More?
@@ -269,23 +287,6 @@ const Home = () => {
             </a>
           </div>
         </section>
-        {/* Footer */}
-        <footer className="bg-gray-900 text-white text-center py-6">
-          <p className="text-sm">
-            Made with ❤️ using{" "}
-            <a
-              href="https://restcountries.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              REST Countries API
-            </a>
-          </p>
-          <p className="text-xs mt-2">
-            © 2025 Explore the World. All rights reserved.
-          </p>
-        </footer>
       </div>
     </>
   );
